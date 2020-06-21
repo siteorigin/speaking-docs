@@ -1,0 +1,78 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//sdk.amazonaws.com/js/aws-sdk-2.701.0.min.js"></script>
+
+<script>
+  const awsRegionInput = $('#aws-region');
+  const awsIdentityPoolIdInput = $('#aws-identity-pool-id');
+
+  function loadPreferences(options) {
+    awsRegionInput.val(options.awsRegion);
+    awsIdentityPoolIdInput.val(options.awsIdentityPoolId);
+
+    toggleLoader();
+  }
+
+  function save() {
+    const awsRegion = awsRegionInput.val();
+    const awsIdentityPoolId = awsIdentityPoolIdInput.val();
+
+    AWS.config.region = awsRegion;
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: awsIdentityPoolId});
+
+    if (AWS.config.credentials.identityId === undefined) {
+      showError('The Identity Pool ID is incorrect.');
+      return false;
+    }
+
+    google.script.run.
+        withFailureHandler(showError).
+        withSuccessHandler(function() {
+          showSuccess('The AWS credentials has been updated.');
+        }).
+        setPreferences({
+          awsRegion,
+          awsIdentityPoolId,
+        });
+
+    clearResult();
+  }
+
+  function reset() {
+    google.script.run.
+        withFailureHandler(showError).
+        withSuccessHandler(function() {
+          showSuccess('The AWS credentials has been reset.');
+        }).
+        setPreferences({
+          awsRegion: '',
+          awsIdentityPoolId: '',
+        });
+
+    awsRegionInput.val('');
+    awsIdentityPoolIdInput.val('');
+
+    clearResult();
+  }
+
+  function showError(message) {
+    $('#result').html(`<p class="error">Error. ${message}</p>`);
+  }
+
+  function showSuccess(message) {
+    $('#result').html(`<p class="success">Success. ${message}</p>`);
+  }
+
+  function clearResult() {
+    $('#result').html('');
+  }
+
+  function toggleLoader() {
+    $('#loader').toggle();
+    $('#form').toggle();
+  }
+
+  $('#save').click(save);
+  $('#reset').click(reset);
+
+  google.script.run.withSuccessHandler(loadPreferences).getPreferences();
+</script>

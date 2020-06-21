@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+
+    <?!= include('addon/_sidebar/stylesheet'); ?>
+</head>
+<body>
+<div class="sidebar branding-below">
+    <?!= include('addon/_utils/loader'); ?>
+
+    <form id="form-sidebar" style="display: none;">
+        <div id='result'></div>
+
+        <div class="block form-group">
+            <label for="text-textarea"><b>Text</b></label>
+            <textarea class="width-100" id="text-textarea" rows="10"></textarea>
+        </div>
+
+        <div id="audio-box" style="display: none;">
+            <audio id="audioPlayback" controls>
+                <source id="audioSource" type="audio/mp3" src="">
+            </audio>
+        </div>
+
+        <div class="block" id="button-bar">
+            <button class="blue" id="run-listen-to-speech" disabled>Listen to speech</button>
+            <button id="insert-text">Insert To Selected</button>
+        </div>
+    </form>
+
+    <p id="help-incorrect-aws" style="display: none">
+        To use "Listen to speech" functions, you have to add the correct AWS credentials.<br>
+        <a href="#" id="open-settings">Edit AWS credentials</a>
+    </p>
+</div>
+
+<?!= include('addon/_sidebar/javascript'); ?>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.701.0.min.js"></script>
+
+<script type="text/javascript">
+  const textTextarea = $('#text-textarea');
+
+  function speakText() {
+    const text = textTextarea.val();
+
+    if (text.length === 0) {
+      return false;
+    }
+
+    const speechParams = {
+      OutputFormat: 'mp3',
+      Text: text,
+      TextType: 'text',
+      VoiceId: 'Matthew',
+    };
+
+    const polly = new AWS.Polly({apiVersion: '2016-06-10'});
+    const signer = new AWS.Polly.Presigner(speechParams, polly);
+
+    signer.getSynthesizeSpeechUrl(speechParams, function(error, url) {
+      if (error) {
+        showError(error);
+      } else {
+        playAudio(url);
+      }
+    });
+  }
+
+  function playAudio(url) {
+    document.getElementById('audioSource').src = url;
+    document.getElementById('audioPlayback').load();
+    document.getElementById('audioPlayback').play();
+  }
+
+  function runListenToSpeech() {
+    clearResult();
+    speakText();
+  }
+
+  function insertToSelected(callback) {
+    google.script.run.
+        withSuccessHandler(function(selectedText) {
+          textTextarea.val(selectedText);
+
+          if (typeof callback === 'function') {
+            callback();
+          }
+        }).
+        getSelectedText();
+  }
+
+  function validate(config) {
+    return config.awsRegion && config.awsIdentityPoolId;
+  }
+
+  function loadPreferences(config) {
+    if (validate(config) === false) {
+      $('#help-incorrect-aws').show();
+      insertToSelected(toggleLoader);
+      return false;
+    }
+
+    $('#run-listen-to-speech').prop('disabled', false);
+    $('#audio-box').show();
+
+    AWS.config.region = config.awsRegion;
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: config.awsIdentityPoolId});
+
+    insertToSelected(function() {
+      toggleLoader();
+      speakText();
+    });
+  }
+
+  function toggleLoader() {
+    $('#loader').toggle();
+    $('#form-sidebar').toggle();
+  }
+
+  function showError(message) {
+    $('#result').html(`<p class="error">Error. ${message}</p>`);
+  }
+
+  function clearResult() {
+    $('#result').html('');
+  }
+
+  function openSettings() {
+    google.script.run.showSettings();
+  }
+
+  $('#run-listen-to-speech').click(runListenToSpeech);
+  $('#insert-text').click(insertToSelected);
+  $('#open-settings').click(openSettings);
+
+  google.script.run.withSuccessHandler(loadPreferences).getPreferences();
+</script>
