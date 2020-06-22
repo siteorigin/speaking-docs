@@ -1,7 +1,7 @@
 function onOpen(e) {
   DocumentApp.getUi().
       createAddonMenu().
-      addItem('Listen To Selected', 'showSidebar').
+      addItem('Start With Selected', 'showSidebar').
       addItem('Edit AWS credentials', 'showSettings').
       addToUi();
 }
@@ -53,6 +53,42 @@ function getSelectedText() {
     }
   }
   return text;
+}
+
+function replaceSelection( newText ) {
+  var selection = DocumentApp.getActiveDocument().getSelection();
+  if ( selection ) {
+    var elements = selection.getRangeElements();
+    var replace = true;
+    for ( var i = 0; i < elements.length; i ++ ) {
+      if ( elements[i].isPartial() ) {
+        var element = elements[i].getElement().asText();
+        var startIndex = elements[i].getStartOffset();
+        var endIndex = elements[i].getEndOffsetInclusive();
+        var text = element.getText().substring( startIndex, endIndex + 1 );
+        element.deleteText( startIndex, endIndex );
+        if ( replace ) {
+          element.insertText( startIndex, newText );
+          replace = false;
+        }
+      } else {
+        var element = elements[i].getElement();
+        if ( replace && element.editAsText ) {
+          element.clear().asText().setText( newText );
+          replace = false;
+        } else {
+          if ( replace && i === elements.length - 1 ) {
+            var parent = element.getParent();
+            parent[parent.insertText ? 'insertText' : 'insertParagraph']( parent.getChildIndex( element ), newText );
+            replace = false; //not really necessary since it's the last one
+          }
+          element.removeFromParent();
+        }
+      }
+    }
+  } else {
+    throw "Hey, select something so I can replace!";
+  }
 }
 
 function getPreferences() {

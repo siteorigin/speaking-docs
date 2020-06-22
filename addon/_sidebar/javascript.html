@@ -42,7 +42,7 @@
     speakText();
   }
 
-  function insertToSelected(callback) {
+  function importFromSelection(callback) {
     google.script.run.
         withSuccessHandler(function(selectedText) {
           textTextarea.val(selectedText);
@@ -54,6 +54,10 @@
         getSelectedText();
   }
 
+  function exportToSelection(){
+  	google.script.run.replaceSelection($('#text-textarea').val());
+  }
+
   function validate(config) {
     return config.awsRegion && config.awsIdentityPoolId;
   }
@@ -61,7 +65,7 @@
   function loadPreferences(config) {
     if (validate(config) === false) {
       $('#help-incorrect-aws').show();
-      insertToSelected(toggleLoader);
+      importFromSelection(toggleLoader);
       return false;
     }
 
@@ -71,10 +75,7 @@
     AWS.config.region = config.awsRegion;
     AWS.config.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: config.awsIdentityPoolId});
 
-    insertToSelected(function() {
-      toggleLoader();
-      speakText();
-    });
+    importFromSelection(toggleLoader);
   }
 
   function toggleLoader() {
@@ -95,7 +96,8 @@
   }
 
   $('#run-listen-to-speech').click(runListenToSpeech);
-  $('#insert-text').click(insertToSelected);
+  $('#import-text').click(importFromSelection);
+  $('#export-text').click(exportToSelection);
   $('#open-settings').click(openSettings);
 
   google.script.run.withSuccessHandler(loadPreferences).getPreferences();
