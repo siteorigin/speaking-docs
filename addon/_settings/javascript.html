@@ -15,8 +15,8 @@
   function save(e) {
     e.preventDefault()
 
-    const awsRegion = awsRegionInput.val();
-    const awsIdentityPoolId = awsIdentityPoolIdInput.val();
+    const awsRegion = awsRegionInput.val().trim();
+    const awsIdentityPoolId = awsIdentityPoolIdInput.val().trim();
 
     AWS.config.region = awsRegion;
     AWS.config.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: awsIdentityPoolId});
