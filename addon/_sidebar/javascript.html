@@ -13,8 +13,9 @@
 
     const speechParams = {
       OutputFormat: 'mp3',
-      Text: text,
-      TextType: 'text',
+	  Engine: 'neural',
+      Text: `<speak><amazon:domain name="conversational">${text}</amazon:domain></speak>`,
+	  TextType: 'ssml',
       VoiceId: 'Matthew',
     };
 
