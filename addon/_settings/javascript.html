@@ -18,14 +18,6 @@
     const awsRegion = awsRegionInput.val().trim();
     const awsIdentityPoolId = awsIdentityPoolIdInput.val().trim();
 
-    AWS.config.region = awsRegion;
-    AWS.config.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: awsIdentityPoolId});
-
-    if (AWS.config.credentials.identityId === undefined) {
-      showError('The Identity Pool ID is incorrect.');
-      return false;
-    }
-
     google.script.run.
         withFailureHandler(showError).
         withSuccessHandler(function() {
