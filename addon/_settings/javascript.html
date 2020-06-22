@@ -12,7 +12,9 @@
     toggleLoader();
   }
 
-  function save() {
+  function save(e) {
+    e.preventDefault()
+
     const awsRegion = awsRegionInput.val();
     const awsIdentityPoolId = awsIdentityPoolIdInput.val();
 
@@ -37,7 +39,9 @@
     clearResult();
   }
 
-  function reset() {
+  function reset(e) {
+    e.preventDefault()
+
     google.script.run.
         withFailureHandler(showError).
         withSuccessHandler(function() {
