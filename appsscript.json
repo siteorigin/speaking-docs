@@ -3,7 +3,7 @@
   "dependencies": {
   },
   "exceptionLogging": "STACKDRIVER",
-  "runtimeVersion": "V8",
+  "runtimeVersion": "STABLE",
   "oauthScopes" : [
     "https://www.googleapis.com/auth/script.container.ui",
     "https://www.googleapis.com/auth/documents.currentonly"
@@ -17,6 +17,6 @@
         "runFunction": "showSettings"
       }]
     },
-    "drive": {}
+    "docs": {}
   }
 }
