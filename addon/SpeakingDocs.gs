@@ -1,7 +1,7 @@
 function onOpen(e) {
   DocumentApp.getUi().
       createAddonMenu().
-      addItem('Show', 'showSidebar').
+      addItem('Show Sidebar', 'showSidebar').
       addItem('AWS Credentials', 'showSettings').
       addToUi();
 }
