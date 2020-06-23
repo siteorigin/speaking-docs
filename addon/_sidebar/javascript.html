@@ -59,7 +59,7 @@
   }
 
   function validate(config) {
-    return config.awsRegion && config.awsIdentityPoolId;
+    return config.awsRegion && config.awsAccessKeyId && config.awsSecretAccessKey;
   }
 
   function loadPreferences(config) {
@@ -73,7 +73,10 @@
     $('#audio-box').show();
 
     AWS.config.region = config.awsRegion;
-    AWS.config.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: config.awsIdentityPoolId});
+    AWS.config.credentials = new AWS.Credentials({
+      accessKeyId: config.awsAccessKeyId,
+      secretAccessKey: config.awsSecretAccessKey
+    });
 
     importFromSelection(toggleLoader);
   }

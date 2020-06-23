@@ -9,8 +9,8 @@
       "name" : "Speaking Docs",
       "logoUrl" : "#",
       "universalActions": [{
-        "label": "AWS Settings",
-        "runFunction": "loadPreferences"
+        "label": "AWS Credentials",
+        "runFunction": "showSettings"
       }]
     },
     "drive": {}

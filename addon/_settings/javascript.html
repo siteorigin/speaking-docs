@@ -3,11 +3,13 @@
 
 <script>
   const awsRegionInput = $('#aws-region');
-  const awsIdentityPoolIdInput = $('#aws-identity-pool-id');
+  const awsAccessKeyIdInput = $('#aws-access-key-id');
+  const awsSecretAccessKeyInput = $('#aws-secret-access-key');
 
   function loadPreferences(options) {
     awsRegionInput.val(options.awsRegion);
-    awsIdentityPoolIdInput.val(options.awsIdentityPoolId);
+    awsAccessKeyIdInput.val(options.awsAccessKeyId);
+    awsSecretAccessKeyInput.val(options.awsSecretAccessKey);
 
     toggleLoader();
   }
@@ -16,7 +18,8 @@
     e.preventDefault()
 
     const awsRegion = awsRegionInput.val().trim();
-    const awsIdentityPoolId = awsIdentityPoolIdInput.val().trim();
+    const awsAccessKeyId = awsAccessKeyIdInput.val().trim();
+    const awsSecretAccessKey = awsSecretAccessKeyInput.val().trim();
 
     google.script.run.
         withFailureHandler(showError).
@@ -25,7 +28,8 @@
         }).
         setPreferences({
           awsRegion,
-          awsIdentityPoolId,
+	      awsAccessKeyId,
+	      awsSecretAccessKey,
         });
 
     clearResult();
@@ -37,15 +41,17 @@
     google.script.run.
         withFailureHandler(showError).
         withSuccessHandler(function() {
-          showSuccess('The AWS credentials has been reset.');
+          showSuccess('The AWS credentials have been reset.');
         }).
         setPreferences({
           awsRegion: '',
-          awsIdentityPoolId: '',
+	      awsAccessKeyId: '',
+	      awsSecretAccessKey: '',
         });
 
     awsRegionInput.val('');
-    awsIdentityPoolIdInput.val('');
+    awsAccessKeyIdInput.val('');
+    awsSecretAccessKeyInput.val('');
 
     clearResult();
   }

@@ -1,8 +1,8 @@
 function onOpen(e) {
   DocumentApp.getUi().
       createAddonMenu().
-      addItem('Start With Selected', 'showSidebar').
-      addItem('Edit AWS credentials', 'showSettings').
+      addItem('Show', 'showSidebar').
+      addItem('AWS Credentials', 'showSettings').
       addToUi();
 }
 
@@ -96,7 +96,8 @@ function getPreferences() {
 
   return {
     awsRegion: userProperties.getProperty('awsRegion'),
-    awsIdentityPoolId: userProperties.getProperty('awsIdentityPoolId'),
+    awsAccessKeyId: userProperties.getProperty('awsAccessKeyId'),
+    awsSecretAccessKey: userProperties.getProperty('awsSecretAccessKey'),
   };
 }
 
@@ -104,7 +105,8 @@ function setPreferences(options) {
   var userProperties = PropertiesService.getUserProperties();
 
   userProperties.setProperty('awsRegion', options.awsRegion);
-  userProperties.setProperty('awsIdentityPoolId', options.awsIdentityPoolId);
+  userProperties.setProperty('awsAccessKeyId', options.awsAccessKeyId);
+  userProperties.setProperty('awsSecretAccessKey', options.awsSecretAccessKey);
 }
 
 function include(filename) {
