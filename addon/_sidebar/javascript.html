@@ -6,6 +6,7 @@
 
   function speakText() {
     const text = textTextarea.val();
+    const voice = $('input[name=type-voice]:checked').val();
 
     if (text.length === 0) {
       return false;
@@ -13,10 +14,10 @@
 
     const speechParams = {
       OutputFormat: 'mp3',
-	  Engine: 'neural',
+      Engine: 'neural',
       Text: `<speak><amazon:domain name="conversational">${text}</amazon:domain></speak>`,
-	  TextType: 'ssml',
-      VoiceId: 'Matthew',
+      TextType: 'ssml',
+      VoiceId: voice,
     };
 
     const polly = new AWS.Polly({apiVersion: '2016-06-10'});
@@ -29,6 +30,8 @@
         playAudio(url);
       }
     });
+
+    google.script.run.setPreferences({ voice: voice });
   }
 
   function playAudio(url) {
@@ -54,8 +57,8 @@
         getSelectedText();
   }
 
-  function exportToSelection(){
-  	google.script.run.replaceSelection($('#text-textarea').val());
+  function exportToSelection() {
+    google.script.run.replaceSelection($('#text-textarea').val());
   }
 
   function validate(config) {
@@ -71,6 +74,10 @@
 
     $('#run-listen-to-speech').prop('disabled', false);
     $('#audio-box').show();
+
+    if (Object.prototype.hasOwnProperty.call(config, 'voice')) {
+      $('input[name=type-voice][value=' + config.voice + ']').prop('checked', true);
+    }
 
     AWS.config.region = config.awsRegion;
     AWS.config.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: config.awsIdentityPoolId});
