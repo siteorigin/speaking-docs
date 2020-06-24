@@ -55,31 +55,32 @@ function getSelectedText() {
   return text;
 }
 
-function replaceSelection( newText ) {
+function replaceSelection(newText) {
   var selection = DocumentApp.getActiveDocument().getSelection();
-  if ( selection ) {
+  if (selection) {
     var elements = selection.getRangeElements();
     var replace = true;
-    for ( var i = 0; i < elements.length; i ++ ) {
-      if ( elements[i].isPartial() ) {
+    for (var i = 0; i < elements.length; i++) {
+      if (elements[i].isPartial()) {
         var element = elements[i].getElement().asText();
         var startIndex = elements[i].getStartOffset();
         var endIndex = elements[i].getEndOffsetInclusive();
-        var text = element.getText().substring( startIndex, endIndex + 1 );
-        element.deleteText( startIndex, endIndex );
-        if ( replace ) {
-          element.insertText( startIndex, newText );
+        var text = element.getText().substring(startIndex, endIndex + 1);
+        element.deleteText(startIndex, endIndex);
+        if (replace) {
+          element.insertText(startIndex, newText);
           replace = false;
         }
       } else {
         var element = elements[i].getElement();
-        if ( replace && element.editAsText ) {
-          element.clear().asText().setText( newText );
+        if (replace && element.editAsText) {
+          element.clear().asText().setText(newText);
           replace = false;
         } else {
-          if ( replace && i === elements.length - 1 ) {
+          if (replace && i === elements.length - 1) {
             var parent = element.getParent();
-            parent[parent.insertText ? 'insertText' : 'insertParagraph']( parent.getChildIndex( element ), newText );
+            parent[parent.insertText ? 'insertText' : 'insertParagraph'](
+                parent.getChildIndex(element), newText);
             replace = false; //not really necessary since it's the last one
           }
           element.removeFromParent();
@@ -87,7 +88,7 @@ function replaceSelection( newText ) {
       }
     }
   } else {
-    throw "Hey, select something so I can replace!";
+    throw 'Hey, select something so I can replace!';
   }
 }
 
@@ -98,15 +99,22 @@ function getPreferences() {
     awsRegion: userProperties.getProperty('awsRegion'),
     awsAccessKeyId: userProperties.getProperty('awsAccessKeyId'),
     awsSecretAccessKey: userProperties.getProperty('awsSecretAccessKey'),
+    voice: userProperties.getProperty('awsPollyVoice'),
   };
 }
 
 function setPreferences(options) {
   var userProperties = PropertiesService.getUserProperties();
 
-  userProperties.setProperty('awsRegion', options.awsRegion);
-  userProperties.setProperty('awsAccessKeyId', options.awsAccessKeyId);
-  userProperties.setProperty('awsSecretAccessKey', options.awsSecretAccessKey);
+  if (Object.prototype.hasOwnProperty.call(options, 'awsRegion')) {
+    userProperties.setProperty('awsRegion', options.awsRegion);
+    userProperties.setProperty('awsAccessKeyId', options.awsAccessKeyId);
+    userProperties.setProperty('awsSecretAccessKey', options.awsSecretAccessKey);
+  }
+
+  if (Object.prototype.hasOwnProperty.call(options, 'voice')) {
+    userProperties.setProperty('awsPollyVoice', options.voice);
+  }
 }
 
 function include(filename) {

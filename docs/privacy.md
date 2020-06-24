@@ -1,0 +1,1 @@
+This add-on runs client side. No information is collected or shared by this add-on. Requests for audio versions of selected text are sent directly to AWS Polly and are subject to their [privacy policy](https://aws.amazon.com/polly/faqs/#Data_Privacy).
