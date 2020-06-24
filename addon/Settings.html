@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+
+    <?!= include('addon/_settings/stylesheet'); ?>
+</head>
+<body>
+<div>
+    <?!= include('addon/_utils/loader'); ?>
+
+    <form id="form" style="display: none">
+        <div id='result'></div>
+
+        <div class="block form-group">
+            <label for="aws-region"><b>Region</b></label>
+            <select id="aws-region">
+                <option value="">Select region</option>
+                <option value="us-east-1">us-east-1</option>
+                <option value="us-west-2">us-west-2</option>
+                <option value="eu-west-1">eu-west-1</option>
+                <option value="ap-southeast-2">ap-southeast-2</option>
+            </select>
+        </div>
+
+        <div class="block form-group">
+            <label for="aws-identity-pool-id"><b>Identity Pool ID</b></label>
+            <input type="text" class="width-100" id="aws-identity-pool-id">
+
+            <a href="https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/getting-started-browser.html#getting-started-browser-create-identity-pool"
+               target="_blank">
+                How to get AWS Identity Pool Id
+            </a>
+        </div>
+
+        <div class="block">
+            <button class="blue" id="save">Save</button>
+            <button id="reset">Reset</button>
+        </div>
+    </form>
+</div>
+<?!= include('addon/_settings/javascript'); ?>
+</body>
+</html>

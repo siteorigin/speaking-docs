@@ -1,0 +1,18 @@
+{
+  "timeZone": "America/New_York",
+  "dependencies": {
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "addOns": {
+    "common": {
+      "name" : "Speaking Docs",
+      "logoUrl" : "#",
+      "universalActions": [{
+        "label": "AWS Settings",
+        "runFunction": "loadPreferences"
+      }]
+    },
+    "drive": {}
+  }
+}
